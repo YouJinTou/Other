@@ -9,4 +9,4 @@ public:
 	static Spoofer Initialize();
 };
 
-#endif // !INITIALIZER
+#endif // !INITIALIZER 

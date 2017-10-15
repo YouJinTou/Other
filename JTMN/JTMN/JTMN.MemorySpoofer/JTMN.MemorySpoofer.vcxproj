@@ -111,15 +111,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Temp\Game Hacking\Assault Cube\AC\AC.Spoofer\Initializer.h" />
-    <ClInclude Include="..\..\..\..\Temp\Game Hacking\Assault Cube\AC\AC.Spoofer\Spoofer.h" />
-    <ClInclude Include="..\..\..\..\Temp\Game Hacking\Assault Cube\AC\AC.Spoofer\TargetAddress.h" />
+    <ClInclude Include="Initializer.h" />
+    <ClInclude Include="Spoofer.h" />
+    <ClInclude Include="TargetAddress.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Temp\Game Hacking\Assault Cube\AC\AC.Spoofer\Initializer.cpp" />
-    <ClCompile Include="..\..\..\..\Temp\Game Hacking\Assault Cube\AC\AC.Spoofer\main.cpp" />
-    <ClCompile Include="..\..\..\..\Temp\Game Hacking\Assault Cube\AC\AC.Spoofer\Spoofer.cpp" />
-    <ClCompile Include="..\..\..\..\Temp\Game Hacking\Assault Cube\AC\AC.Spoofer\TargetAddress.cpp" />
+    <ClCompile Include="Initializer.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Spoofer.cpp" />
+    <ClCompile Include="TargetAddress.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
