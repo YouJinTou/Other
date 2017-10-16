@@ -3,18 +3,17 @@
 
 #include <Windows.h>
 #include <TlHelp32.h>
-#include <string>
 
 #include "ProcessLocator.h"
 
 class Injector
 {
 public:
-	Injector(ProcessLocator locator, const std::string& dllFilePath);
+	Injector(ProcessLocator locator, const WCHAR* dllFilePath);
 	bool Inject() const;
 private:
 	ProcessLocator locator;
-	std::string dllFilePath;
+	const WCHAR* dllFilePath;
 };
 
 #endif // !INJECTOR

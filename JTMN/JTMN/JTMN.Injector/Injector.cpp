@@ -1,6 +1,8 @@
 #include "Injector.h"
 
-Injector::Injector(ProcessLocator locator, const std::string& dllFilePath) :
+typedef HINSTANCE(*fpLoadLibrary)(char*);
+
+Injector::Injector(ProcessLocator locator, const WCHAR* dllFilePath) :
 	locator(locator),
 	dllFilePath(dllFilePath)
 {
@@ -22,14 +24,29 @@ bool Injector::Inject() const
 		return false;
 	}
 
-	HINSTANCE hKernelLib = LoadLibrary("KERNEL32");
-	auto funcAddress = GetProcAddress(hKernelLib, "LoadLibraryA");
-	LPVOID paramAddress = VirtualAllocEx(hProcess, NULL, dllFilePath.length(), MEM_COMMIT, PAGE_READWRITE);
-	bool memoryWritten = WriteProcessMemory(hProcess, paramAddress, nullptr, sizeof(int), NULL);
+	const int dllPathSize = (wcslen(dllFilePath) + 1) * sizeof(WCHAR);
+	LPVOID pAddress = VirtualAllocEx(hProcess, NULL, dllPathSize, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);	
+	bool written = WriteProcessMemory(hProcess, pAddress, dllFilePath, dllPathSize, NULL);
 
-	CreateRemoteThread(hProcess, 0, 0, (LPTHREAD_START_ROUTINE)funcAddress, paramAddress, 0, 0);
+	if (!written)
+	{
+		return false;
+	}
+
+	HMODULE hKernel = GetModuleHandleA("kernel32.dll");
+	FARPROC funcAddress = GetProcAddress(hKernel, "LoadLibraryW");
+	DWORD threadId;
+	HANDLE hRemoteThread = 
+		CreateRemoteThread(hProcess, 0, 0, (LPTHREAD_START_ROUTINE)funcAddress, pAddress, 0, &threadId);
+
+	WaitForSingleObject(hRemoteThread, INFINITE);
+
+	DWORD exitCode;
+
+	GetExitCodeThread(hRemoteThread, &exitCode);
 
 	CloseHandle(hProcess);
+	CloseHandle(hRemoteThread);
 
-	return memoryWritten;
+	return exitCode != 0;
 }
