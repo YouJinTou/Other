@@ -1,13 +1,17 @@
 #include <Windows.h>
 
-extern int main();
+#include "Listener.h"
 
 DWORD WINAPI Run(LPVOID lpParam)
 {
+	Listener listener;
+	
+	listener.Listen();
 
+	return NULL;
 }
 
-BOOL APIENTRY InjectableMain(
+BOOL APIENTRY DllMain(
 	HMODULE hModule,
 	DWORD reason,
 	LPVOID lpReserved)
@@ -15,12 +19,12 @@ BOOL APIENTRY InjectableMain(
 	switch (reason)
 	{
 	case DLL_PROCESS_ATTACH:
-		CreateThread(NULL, 0x100, &Run, 0, 0, NULL);
+		CreateThread(NULL, 0x100, Run, 0, 0, NULL);
 
 		break;
 	default:
 		break;
 	}
 
-	return true;
+	return TRUE;
 }
